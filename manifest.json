@@ -1,6 +1,8 @@
 {
   "title": "Sha's Audio Library",
-  "baseUrl": "https://shafiranoh.com",
+  "baseUrl": "https://media.shafiranoh.com",
+  "reflectionPrompt": "What is the ‘opponent’ in my life — the situation, emotion, temptation, pressure, or fear — that most consistently makes me forget Allah when I encounter it?",
+  "reflectionPromptBy": "Shaykh Adeyinka",
   "tracks": [
     {
       "title": "Deep Sunnah — 22 Oct 2026",

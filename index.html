@@ -3,247 +3,234 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sha's Audio Library</title>
+<title>Sha's Audio Library · Shafira Noh</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
   :root {
-    --bg: #f7f9fc;
-    --card: #ffffff;
-    --ink: #1f2a37;
-    --muted: #6b7280;
-    --accent: #4f8ef7;
-    --accent-soft: #e8f0fe;
-    --track-hover: #f1f5fb;
-    --playing: #eafaf1;
-    --border: #e6eaf0;
-    --shadow: 0 6px 24px rgba(31, 42, 55, 0.08);
+    --paper:        #FCFBF7;
+    --paper-2:      #F7F4FC;
+    --card:         #FFFFFF;
+    --ink:          #241F33;
+    --soft:         #6B6478;
+    --hairline:     rgba(36, 31, 51, 0.12);
+    --hairline-2:   rgba(36, 31, 51, 0.07);
+    --lavender:      #A99BE0;
+    --lavender-deep: #6C5BA7;
+    --lavender-wash: #EFEBFA;
+    --tangerine:      #F26B21;
+    --tangerine-soft: #FFB27A;
+    --tangerine-wash: #FFF1E6;
+    --pucuk:      #7FAE3C;
+    --pucuk-soft: #B6D27A;
+    --pucuk-wash: #F1F7E5;
+    --radius: 14px;
+    --shadow: 0 6px 20px rgba(36, 31, 51, 0.07);
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg);
+    background: var(--paper);
     color: var(--ink);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 32px 16px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
-  .wrap {
-    width: 100%;
-    max-width: 640px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 18px;
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+  /* topbar */
+  .topbar { position: sticky; top: 0; z-index: 60; background: rgba(252,251,247,0.86); backdrop-filter: saturate(1.4) blur(10px); -webkit-backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--hairline-2); }
+  .topbar-inner { max-width: 980px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 18px; }
+  .brand { font-family: 'Source Serif 4', serif; font-weight: 600; font-size: 16px; letter-spacing: -0.01em; white-space: nowrap; }
+  .brand .dot { color: var(--tangerine); }
+  .navlinks { display: flex; gap: 16px; margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; letter-spacing: 0.04em; }
+  .navlinks a { color: var(--soft); white-space: nowrap; transition: color .18s; }
+  .navlinks a:hover { color: var(--tangerine); }
+
+  header.hero { padding: 40px 0 6px; text-align: center; }
+  header.hero h1 { font-family: 'Source Serif 4', serif; font-weight: 500; font-size: clamp(26px,5vw,34px); letter-spacing: -0.02em; }
+  header.hero .handle { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--soft); }
+  header.hero .handle .sep { color: var(--lavender); margin: 0 6px; }
+
+  /* reflection card (highlighted, on top) */
+  .reflection {
+    margin: 22px 0 6px;
+    background: linear-gradient(160deg, var(--lavender-wash), var(--tangerine-wash) 70%);
+    border: 1px solid var(--hairline);
+    border-left: 4px solid var(--tangerine);
+    border-radius: 16px;
+    padding: 20px 22px;
     box-shadow: var(--shadow);
-    overflow: hidden;
+    position: relative;
   }
-  header {
-    padding: 22px 24px 14px;
-    border-bottom: 1px solid var(--border);
+  .reflection .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--tangerine); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 7px;
   }
-  header h1 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 650;
-    letter-spacing: -0.01em;
-  }
-  header p {
-    margin: 4px 0 0;
-    font-size: 13px;
-    color: var(--muted);
-  }
-  .banner {
-    display: none;
-    margin: 14px 24px 0;
-    padding: 10px 14px;
-    background: #fff6e6;
-    border: 1px solid #f3d9a4;
-    border-radius: 10px;
-    font-size: 13px;
-    color: #8a6d2f;
-  }
-  .banner.show { display: block; }
+  .reflection .tag::before { content: "✦"; }
+  .reflection .q { font-family: 'Source Serif 4', serif; font-weight: 500; font-size: 18px; line-height: 1.45; color: var(--ink); }
+  .reflection .by { margin-top: 10px; font-size: 12.5px; color: var(--soft); font-style: italic; }
+
+  /* player card */
   .player {
-    padding: 18px 24px 6px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    margin-top: 18px; background: var(--card); border: 1px solid var(--hairline); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 18px 20px;
   }
+  .player-row { display: flex; align-items: center; gap: 14px; }
   .play-btn {
-    flex: 0 0 auto;
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    border: none;
-    background: var(--accent);
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.08s ease, background 0.15s ease;
+    flex: 0 0 auto; width: 54px; height: 54px; border-radius: 50%; border: none;
+    background: var(--lavender-deep); color: #fff; font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: transform .08s ease;
   }
   .play-btn:active { transform: scale(0.94); }
-  .play-btn:disabled { background: #c7d2e0; cursor: not-allowed; }
+  .play-btn:disabled { background: #cfc7e8; cursor: not-allowed; }
   .meta { min-width: 0; flex: 1 1 auto; }
-  .now-title {
-    font-size: 14px;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .now-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .progress {
-    margin: 8px 24px 0;
-    height: 8px;
-    background: var(--accent-soft);
-    border-radius: 999px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .progress .fill {
-    height: 100%;
-    width: 0%;
-    background: var(--accent);
-    border-radius: 999px;
-    transition: width 0.1s linear;
-  }
-  .times {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    color: var(--muted);
-    padding: 4px 24px 0;
-  }
-  .controls {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 6px 24px 18px;
-  }
-  .ctrl-btn {
-    background: none;
-    border: none;
-    color: var(--ink);
-    font-size: 18px;
-    cursor: pointer;
-    padding: 4px;
-    line-height: 1;
-  }
-  .ctrl-btn:disabled { color: #c7d2e0; cursor: not-allowed; }
+  .now-title { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .now-sub { font-size: 12px; color: var(--soft); margin-top: 2px; }
+  .progress { margin-top: 12px; height: 8px; background: var(--lavender-wash); border-radius: 999px; cursor: pointer; overflow: hidden; }
+  .progress .fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--lavender), var(--tangerine) 60%, var(--pucuk)); border-radius: 999px; transition: width .1s linear; }
+  .times { display: flex; justify-content: space-between; font-size: 11px; color: var(--soft); padding-top: 4px; font-family: 'JetBrains Mono', monospace; }
+  .controls { display: flex; align-items: center; gap: 16px; padding-top: 8px; }
+  .ctrl-btn { background: none; border: none; color: var(--ink); font-size: 18px; cursor: pointer; padding: 4px; line-height: 1; }
+  .ctrl-btn:disabled { color: #cfc7e8; cursor: not-allowed; }
   .vol { display: flex; align-items: center; gap: 6px; margin-left: auto; }
-  .vol input { width: 90px; accent-color: var(--accent); }
-  ul.list {
-    list-style: none;
-    margin: 0;
-    padding: 6px 12px 18px;
-    max-height: 320px;
-    overflow-y: auto;
-  }
-  ul.list li {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 12px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background 0.12s ease;
-  }
-  ul.list li:hover { background: var(--track-hover); }
-  ul.list li.playing { background: var(--playing); }
-  .idx {
-    flex: 0 0 auto;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: 12px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  li.playing .idx { background: var(--accent); color: #fff; }
+  .vol input { width: 90px; accent-color: var(--lavender-deep); }
+
+  /* track list */
+  .status { padding: 14px 0 4px; font-size: 12px; color: var(--soft); }
+  ul.list { list-style: none; margin: 0; padding: 4px 0 6px; }
+  ul.list li { display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 12px; cursor: pointer; transition: background .12s ease; }
+  ul.list li:hover { background: var(--tangerine-wash); }
+  ul.list li.playing { background: var(--pucuk-wash); }
+  .idx { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; background: var(--lavender-wash); color: var(--lavender-deep); font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+  li.playing .idx { background: var(--tangerine); color: #fff; }
   .t-info { min-width: 0; flex: 1 1 auto; }
   .t-title { font-size: 14px; font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .t-date { font-size: 12px; color: var(--muted); }
-  .status { padding: 0 24px 18px; font-size: 12px; color: var(--muted); }
-  .notes {
-    padding: 4px 24px 8px;
-  }
-  .notes-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--accent-soft);
-    color: var(--accent);
-    border: none;
-    border-radius: 999px;
-    padding: 7px 14px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    margin: 6px 0 0;
-  }
+  .t-date { font-size: 12px; color: var(--soft); font-family: 'JetBrains Mono', monospace; }
+
+  /* notes */
+  .notes { padding: 4px 0 8px; }
+  .notes-toggle { display: inline-flex; align-items: center; gap: 6px; background: var(--lavender-wash); color: var(--lavender-deep); border: none; border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 600; cursor: pointer; margin: 6px 0 0; }
   .notes-toggle:active { transform: scale(0.97); }
-  .notes-body {
-    display: none;
-    margin-top: 12px;
-    border-top: 1px solid var(--border);
-    padding-top: 12px;
-  }
+  .notes-body { display: none; margin-top: 12px; border-top: 1px solid var(--hairline); padding-top: 12px; }
   .notes-body.open { display: block; }
-  .notes-body h3 {
-    font-size: 13px;
-    font-weight: 700;
-    margin: 14px 0 6px;
-    color: var(--ink);
-    letter-spacing: 0.01em;
-  }
+  .notes-body h3 { font-family: 'Source Serif 4', serif; font-size: 15px; font-weight: 500; margin: 16px 0 6px; color: var(--ink); letter-spacing: -0.01em; }
   .notes-body h3:first-child { margin-top: 0; }
+  .notes-body h3::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 8px; vertical-align: middle; background: linear-gradient(90deg, var(--lavender), var(--tangerine)); }
   .notes-body ul { margin: 0; padding-left: 18px; }
-  .notes-body li { font-size: 13px; line-height: 1.5; color: #374151; margin-bottom: 7px; }
-  audio { display: none; }
-  footer { padding: 0 24px 20px; font-size: 11px; color: #9aa3b2; }
+  .notes-body li { font-size: 13.5px; line-height: 1.55; color: #3a3450; margin-bottom: 7px; }
+
+  footer { text-align: center; margin-top: 40px; padding: 30px 0 56px; border-top: 1px solid var(--hairline-2); font-family: 'Source Serif 4', serif; font-style: italic; font-size: 14px; color: var(--soft); }
+  footer .links-row { font-family: 'Inter', sans-serif; font-style: normal; font-size: 13px; margin-top: 10px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  footer .links-row a { border-bottom: 1px solid var(--hairline); padding-bottom: 1px; }
+  footer .links-row a:hover { color: var(--tangerine); border-color: var(--tangerine); }
+  footer .stamp { font-family: 'JetBrains Mono', monospace; font-style: normal; font-size: 10.5px; letter-spacing: 0.05em; color: var(--soft); margin-top: 16px; opacity: .8; }
+
+  /* corner cat */
+  .corner-cat { position: fixed; right: 18px; bottom: 16px; z-index: 70; width: 58px; height: 58px; cursor: pointer; filter: drop-shadow(0 6px 12px rgba(36,31,51,0.18)); animation: catBob 3.4s ease-in-out infinite; transition: transform .2s; }
+  .corner-cat:hover { transform: scale(1.08); }
+  @keyframes catBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+  .corner-cat .purr { position: absolute; right: 66px; bottom: 14px; background: var(--ink); color: var(--paper); font-family: 'JetBrains Mono', monospace; font-size: 10.5px; padding: 5px 10px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .25s; }
+  .corner-cat:hover .purr, .corner-cat.show .purr { opacity: 1; }
+  .cat-eye { transform-box: fill-box; transform-origin: center; animation: blinkEyes 4.6s ease-in-out infinite; }
+  @keyframes blinkEyes { 0%,90%,100% { transform: scaleY(1); } 95% { transform: scaleY(0.08); } }
+
+  @media (max-width: 620px) { header.hero { padding-top: 30px; } .corner-cat { width: 48px; height: 48px; right: 12px; bottom: 12px; } }
+  @media (prefers-reduced-motion: reduce) { .corner-cat { animation: none; } .cat-eye { animation: none; } }
 </style>
 </head>
 <body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#">Shafira Noh<span class="dot">.</span></a>
+    <nav class="navlinks" aria-label="Sections">
+      <a href="https://shafiranoh.com/">home</a>
+      <a href="https://blog.shafiranoh.com/">blog</a>
+      <a class="pill" href="https://shafiranoh.com/">main site ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main>
   <div class="wrap">
-    <header>
-      <h1 id="lib-title">Sha's Audio Library</h1>
-      <p id="lib-sub">Streaming from R2 &middot; big files welcome</p>
+    <header class="hero">
+      <h1>Audio Library</h1>
+      <p class="handle">@shafiranoh <span class="sep">·</span> streaming from R2</p>
     </header>
-    <div class="banner" id="banner"></div>
+
+    <div class="reflection" id="reflectionCard" hidden>
+      <div class="tag" id="reflectionTag">Life Work Reflection</div>
+      <div class="q" id="reflectionQ"></div>
+      <div class="by" id="reflectionBy"></div>
+    </div>
+
     <div class="player">
-      <button class="play-btn" id="playBtn" disabled aria-label="Play / Pause">&#9658;</button>
-      <div class="meta">
-        <div class="now-title" id="nowTitle">Select a track</div>
-        <div class="now-sub" id="nowSub">&nbsp;</div>
+      <div class="player-row">
+        <button class="play-btn" id="playBtn" disabled aria-label="Play / Pause">&#9658;</button>
+        <div class="meta">
+          <div class="now-title" id="nowTitle">Select a track</div>
+          <div class="now-sub" id="nowSub">&nbsp;</div>
+        </div>
+      </div>
+      <div class="progress" id="progress"><div class="fill" id="fill"></div></div>
+      <div class="times"><span id="cur">0:00</span><span id="dur">0:00</span></div>
+      <div class="controls">
+        <button class="ctrl-btn" id="prevBtn" title="Previous" disabled>&#9198;</button>
+        <button class="ctrl-btn" id="nextBtn" title="Next" disabled>&#9197;</button>
+        <div class="vol"><span aria-hidden="true">&#128266;</span><input type="range" id="vol" min="0" max="1" step="0.01" value="1" aria-label="Volume" /></div>
       </div>
     </div>
-    <div class="progress" id="progress"><div class="fill" id="fill"></div></div>
-    <div class="times"><span id="cur">0:00</span><span id="dur">0:00</span></div>
-    <div class="controls">
-      <button class="ctrl-btn" id="prevBtn" title="Previous" disabled>&#9198;</button>
-      <button class="ctrl-btn" id="nextBtn" title="Next" disabled>&#9197;</button>
-      <div class="vol">
-        <span aria-hidden="true">&#128266;</span>
-        <input type="range" id="vol" min="0" max="1" step="0.01" value="1" aria-label="Volume" />
-      </div>
-    </div>
+
     <div class="status" id="status">Loading library&hellip;</div>
     <ul class="list" id="list"></ul>
+
     <div class="notes" id="notes" hidden>
       <button class="notes-toggle" id="notesToggle" aria-expanded="false">&#9776; Show notes &amp; reflections</button>
       <div class="notes-body" id="notesBody"></div>
     </div>
-    <footer>Add future tracks by editing <code>manifest.json</code> &mdash; no code changes needed.</footer>
   </div>
-  <audio id="audio" preload="metadata"></audio>
+
+  <footer>
+    Musafir, hamba, berkelana. Semoga Allah redha.<br>
+    <span class="links-row">
+      <a href="https://shafiranoh.com/">main site</a>
+      <a href="https://blog.shafiranoh.com/">blog</a>
+      <a href="mailto:hai@shafiranoh.com">hai@shafiranoh.com</a>
+    </span>
+    <p class="stamp">streaming from Cloudflare R2 · add tracks in manifest.json</p>
+  </footer>
+</main>
+
+<div class="corner-cat" id="cornerCat" role="button" tabindex="0" aria-label="Say hi to the cat">
+  <span class="purr" id="purrText">purrr</span>
+  <svg viewBox="0 0 100 100" width="100%" height="100%" role="img" aria-label="Orange cat mascot">
+    <path class="cat-tail" d="M76,74 q17,-5 13,-23" stroke="#E8802F" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <ellipse cx="50" cy="73" rx="25" ry="19" fill="#F59A4A"/>
+    <path d="M28,36 L23,11 L46,25 Z" fill="#F59A4A"/>
+    <path d="M72,36 L77,11 L54,25 Z" fill="#F59A4A"/>
+    <path d="M31,32 L28,18 L41,26 Z" fill="#F7C6A0"/>
+    <path d="M69,32 L72,18 L59,26 Z" fill="#F7C6A0"/>
+    <circle cx="50" cy="47" r="27" fill="#FBAE5C"/>
+    <path d="M50,22 v9 M42,24 l3,8 M58,24 l-3,8" stroke="#E8802F" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+    <g class="cat-eye">
+      <ellipse cx="39" cy="46" rx="8.6" ry="9.6" fill="#FFFFFF"/>
+      <circle cx="40" cy="47" r="4.3" fill="#241F33"/>
+      <circle cx="37.6" cy="44" r="1.7" fill="#FFFFFF"/>
+    </g>
+    <g class="cat-eye">
+      <ellipse cx="61" cy="46" rx="8.6" ry="9.6" fill="#FFFFFF"/>
+      <circle cx="60" cy="47" r="4.3" fill="#241F33"/>
+      <circle cx="57.6" cy="44" r="1.7" fill="#FFFFFF"/>
+    </g>
+    <path d="M50,55 l-3.2,-2.6 h6.4 z" fill="#E86A8A"/>
+    <path d="M43.5,59 q6.5,6.5 13,0" stroke="#241F33" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+    <path d="M21,50 h-9 M21,55 h-9 M79,50 h9 M79,55 h9" stroke="#E8802F" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<audio id="audio" preload="metadata"></audio>
 
 <script>
 (function () {
@@ -259,8 +246,17 @@
     const s = Math.floor(sec % 60);
     return m + ":" + (s < 10 ? "0" : "") + s;
   }
-  function resolve(base, file) {
-    return base.replace(/\/+$/, "") + "/" + file.replace(/^\/+/, "");
+  function resolve(base, file) { return base.replace(/\/+$/, "") + "/" + file.replace(/^\/+/, ""); }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  function renderReflection(d) {
+    const card = $("reflectionCard");
+    if (!d || !d.reflectionPrompt) { card.hidden = true; return; }
+    card.hidden = false;
+    $("reflectionQ").textContent = d.reflectionPrompt;
+    $("reflectionBy").textContent = d.reflectionPromptBy ? ("— asked by " + d.reflectionPromptBy) : "";
   }
 
   async function loadManifest() {
@@ -269,37 +265,27 @@
       if (!res.ok) throw new Error("HTTP " + res.status);
       const data = await res.json();
       tracks = Array.isArray(data.tracks) ? data.tracks : [];
-      if (data.title) $("lib-title").textContent = data.title;
-      if (!data.baseUrl || data.baseUrl.includes("REPLACE-WITH-YOUR-BUCKET")) {
-        showBanner("Set your R2 bucket URL in manifest.json → baseUrl (e.g. https://my-bucket.r2.dev).");
+      if (data.title) document.title = data.title + " · Shafira Noh";
+      if (!data.baseUrl || data.baseUrl.includes("REPLACE")) {
+        $("status").textContent = "Set baseUrl in manifest.json to your R2 base.";
       }
       window.__baseUrl = data.baseUrl || "";
+      renderReflection(data);
       render();
     } catch (e) {
       $("status").textContent = "Could not load manifest.json: " + e.message;
     }
   }
 
-  function showBanner(msg) {
-    const b = $("banner");
-    b.textContent = msg;
-    b.classList.add("show");
-  }
-
   function render() {
     const list = $("list");
     list.innerHTML = "";
-    if (!tracks.length) {
-      $("status").textContent = "No tracks found in manifest.json.";
-      return;
-    }
+    if (!tracks.length) { $("status").textContent = "No tracks found in manifest.json."; return; }
     $("status").textContent = tracks.length + " track" + (tracks.length > 1 ? "s" : "") + " loaded.";
     tracks.forEach((t, i) => {
       const li = document.createElement("li");
       li.dataset.i = i;
-      li.innerHTML =
-        '<div class="idx">' + (i + 1) + '</div>' +
-        '<div class="t-info"><div class="t-title"></div><div class="t-date"></div></div>';
+      li.innerHTML = '<div class="idx">' + (i + 1) + '</div><div class="t-info"><div class="t-title"></div><div class="t-date"></div></div>';
       li.querySelector(".t-title").textContent = t.title || ("Track " + (i + 1));
       li.querySelector(".t-date").textContent = t.date || "";
       li.addEventListener("click", () => select(i));
@@ -314,16 +300,10 @@
     const body = $("notesBody");
     const n = t && t.notes;
     if (!n || (!n.mainPoints && !n.reflections && !n.insightfulPoints)) {
-      wrap.hidden = true;
-      body.innerHTML = "";
-      return;
+      wrap.hidden = true; body.innerHTML = ""; return;
     }
     wrap.hidden = false;
-    const sections = [
-      ["Main Points", n.mainPoints],
-      ["Reflections", n.reflections],
-      ["Insightful Points", n.insightfulPoints]
-    ];
+    const sections = [["Main Points", n.mainPoints], ["Reflections", n.reflections], ["Insightful Points", n.insightfulPoints]];
     let html = "";
     for (const [label, items] of sections) {
       if (Array.isArray(items) && items.length) {
@@ -341,12 +321,6 @@
     $("notesToggle").innerHTML = "&#9776; Show notes &amp; reflections";
   }
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, (c) => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-    }[c]));
-  }
-
   function select(i) {
     if (i < 0 || i >= tracks.length) return;
     current = i;
@@ -355,12 +329,10 @@
     audio.src = src;
     $("nowTitle").textContent = t.title || ("Track " + (i + 1));
     $("nowSub").textContent = t.date || src;
-    document.querySelectorAll("#list li").forEach((li, idx) => {
-      li.classList.toggle("playing", idx === i);
-    });
+    document.querySelectorAll("#list li").forEach((li, idx) => li.classList.toggle("playing", idx === i));
     renderNotes(t);
     $("playBtn").disabled = false;
-    audio.play().catch(() => {/* autoplay may be blocked; user can hit play */});
+    audio.play().catch(() => {});
   }
 
   function toggle() {
@@ -373,7 +345,6 @@
     if (n >= 0 && n < tracks.length) select(n);
   }
 
-  // Events
   $("playBtn").addEventListener("click", toggle);
   $("prevBtn").addEventListener("click", () => step(-1));
   $("nextBtn").addEventListener("click", () => step(1));
@@ -381,9 +352,7 @@
     const body = $("notesBody");
     const open = body.classList.toggle("open");
     $("notesToggle").setAttribute("aria-expanded", open ? "true" : "false");
-    $("notesToggle").innerHTML = open
-      ? "&#9776; Hide notes &amp; reflections"
-      : "&#9776; Show notes &amp; reflections";
+    $("notesToggle").innerHTML = open ? "&#9776; Hide notes &amp; reflections" : "&#9776; Show notes &amp; reflections";
   });
   audio.addEventListener("play", () => { $("playBtn").innerHTML = "&#10074;&#10074;"; });
   audio.addEventListener("pause", () => { $("playBtn").innerHTML = "&#9658;"; });
@@ -394,9 +363,7 @@
     $("fill").style.width = pct + "%";
     $("cur").textContent = fmt(audio.currentTime);
   });
-  audio.addEventListener("error", () => {
-    $("nowSub").textContent = "Playback error — browser can't decode this codec. Use AAC (.m4a) or MP3, not ALAC.";
-  });
+  audio.addEventListener("error", () => { $("nowSub").textContent = "Playback error — browser can't decode this codec. Use AAC (.m4a) or MP3, not ALAC."; });
   $("vol").addEventListener("input", (e) => { audio.volume = parseFloat(e.target.value); });
   $("progress").addEventListener("click", (e) => {
     if (!audio.duration) return;
@@ -409,6 +376,18 @@
     else if (e.code === "ArrowRight") step(1);
     else if (e.code === "ArrowLeft") step(-1);
   });
+
+  /* corner cat */
+  (function () {
+    const cat = $("cornerCat"); const purr = $("purrText");
+    if (!cat) return;
+    const lines = ['purrr','meow.','one less bubble today 🎈','have you eaten?','jeda dulu.','still here, still blinking','amanah.','go drink water.'];
+    let i = 0;
+    function speak() { purr.textContent = lines[i % lines.length]; i++; cat.classList.add('show'); clearTimeout(cat._t); cat._t = setTimeout(() => cat.classList.remove('show'), 2200); }
+    cat.addEventListener('click', speak);
+    cat.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); speak(); } });
+    setInterval(() => { if (Math.random() < 0.34) speak(); }, 42000);
+  })();
 
   loadManifest();
 })();
